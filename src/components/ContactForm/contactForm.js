@@ -4,6 +4,7 @@ import validation from '../../helpers/validateCPF';
 import getAddressViaCep from '../../services/viaCEP';
 import * as Yup from 'yup';
 import getValidationErrors from '../../utils/getValidationErrors';
+import { useAlert } from 'react-alert'
 import api from '../../services/api';
 
 const ContactForm = () => {
@@ -26,6 +27,8 @@ const ContactForm = () => {
     const [carroProprio, setCarroProprio] = useState(false); 
     const [vagaPCD, setVagaPCD] = useState(false);
     const [formErrorsState, setFormErrorsState] = useState({});
+
+    const alert = useAlert()
 
     const handleContactForm = useCallback(async (contactFormObject) => {
         try {   
@@ -69,12 +72,12 @@ const ContactForm = () => {
         api
         .post("/users", contactFormObject)
         .then((response) => {
-            window.alert('Seus dados foram cadastrados com sucesso');
+            alert.show('Seus dados foram cadastrados com sucesso');
             clearForm();
         })
         .catch((err) => {
             if ('Error: Request failed with status code 400') {
-                window.alert('CPF ja cadastrado')
+                alert.show('CPF ja cadastrado!')
             }
         });
     }
